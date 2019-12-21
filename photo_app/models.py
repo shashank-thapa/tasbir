@@ -18,4 +18,4 @@ class CommentModel(models.Model):
     created = models.DateTimeField(auto_now_add = True)
     text = models.TextField()
     commented_by = models.ForeignKey(UserModel, on_delete = models.CASCADE)
-    parent_post = models.ForeignKey(PostModel, on_delete = models.CASCADE)
+    parent_post = models.ForeignKey(PostModel, on_delete = models.CASCADE, name='comments')

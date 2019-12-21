@@ -5,11 +5,21 @@
 {% endblock %}
 
 {% block main_content %}
-    This is the index page of Tasbir.
-    The posts are :<br>
     {% for post in posts%}
-        Created on : {{post.created}} <br>
-        Uploaded by: {{post.uploaded_by.display_name}} <br>
-        <img style="width: 400px" src='{{post.image.url}}'><br>
+        <div class="card mx-auto" style="width: 50rem;">
+            <p class="one"><img  src="{{post.image.url}}" class="card-img-top img-thumbnail" alt="...">
+                <h11>likes: {{post.likes}}</h11>
+            </p> 
+            <div class="card-body">
+                <h7 class="card-title"><b>{{post.uploaded_by}}</b></h7>
+                <h15><small>{{post.created}}</small></h15><br>
+            <p class="card-text">
+                {% for comment in comments%}
+                    <h7>{{comment.text}}</h7> by <h10>{{comment.commented_by}} at <small>{{comment.created}}</small></h10><br>
+                {% endfor %}
+            </p>
+            </div>
+        </div> <br>
     {%endfor%}
-{% endblock %}
+{% endblock %} 
+
