@@ -14,6 +14,7 @@ def index(request):
     else:
         return redirect('login')
 
+
 def profile(request, username):
 
     user = UserModel.objects.filter(username=username).first()
@@ -22,3 +23,13 @@ def profile(request, username):
         'user': user,
     }
     return render(request,'photo_app/profile.html', d)
+
+
+def edit(request, username):
+
+    user = UserModel.objects.filter(username=username).first()
+
+    d = {
+        'user': user,
+    } 
+    return render(request,'photo_app/edit.html', d)
