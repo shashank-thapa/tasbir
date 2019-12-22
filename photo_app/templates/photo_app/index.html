@@ -1,25 +1,53 @@
-{% extends 'photo_app/base.html' %}
-
-{% block title %}
-    Welcome to Tasbir
+{% extends 'photo_app/base.html'%}
+{% load static %}
+{%block main_content%} 
+    <main class="feed">
+        {% for post in posts %}
+            <section class="photo">
+                <header class="photo__header">
+                    <div class="photo__header-column">
+                        <img
+                            class="photo__avatar"
+                            src="{{post.uploaded_by.profile_pic.url}}"
+                        />
+                    </div>
+                    <div class="photo__header-column">
+                        <span class="photo__username">{{post.uploaded_by.username}}</span>
+                        <span class="photo__location">{{post.location}}</span>
+                    </div>
+                </header>
+                <div class="photo__file-container">
+                    <img
+                        class="photo__file"
+                        src="{{post.image.url}}"
+                    />
+                </div>
+                <div class="photo__info">
+                    <div class="photo__icons">
+                        <span class="photo__icon">
+                            <i class="fa fa-heart-o heart fa-lg"></i>
+                        </span>
+                        <span class="photo__icon">
+                            <i class="fa fa-comment-o fa-lg"></i>
+                        </span>
+                    </div>
+                    {% if post.liked_by.all %}
+                    <span class="photo__likes">{{post.liked_by.all|length}} like{{post.liked_by.all|pluralize:"s"}}</span>
+                    {% endif %}
+                    <ul class="photo__comments">
+                        {% for comment in post.comments.all%}
+                            <li class="photo__comment">
+                                <span class="photo__comment-author">{{comment.commented_by.username}}</span>{{comment.text}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <span class="photo__time-ago">{{post.created}}</span>
+                    <div class="photo__add-comment-container">
+                        <textarea placeholder="Add a comment..." class="photo__add-comment"></textarea>
+                        <i class="fa fa-ellipsis-h"></i>
+                    </div>
+                </div>
+            </section>
+        {% endfor %}
+    </main>
 {% endblock %}
-
-{% block main_content %}
-    {% for post in posts%}
-        <div class="card mx-auto" style="width: 50rem;">
-            <p class="one"><img  src="{{post.image.url}}" class="card-img-top img-thumbnail" alt="...">
-                <h11>likes: {{post.likes}}</h11>
-            </p> 
-            <div class="card-body">
-                <h7 class="card-title"><b>{{post.uploaded_by}}</b></h7>
-                <h15><small>{{post.created}}</small></h15><br>
-            <p class="card-text">
-                {% for comment in comments%}
-                    <h7>{{comment.text}}</h7> by <h10>{{comment.commented_by}} at <small>{{comment.created}}</small></h10><br>
-                {% endfor %}
-            </p>
-            </div>
-        </div> <br>
-    {%endfor%}
-{% endblock %} 
-

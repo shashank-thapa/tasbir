@@ -1,18 +1,24 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import PostModel
 from .models import CommentModel
+from user_app.models import UserModel
 
 # Create your views here.
 def index(request):
+    if 'user_id' in request.session:
+        allpost = PostModel.objects.all().order_by('-created')
+        d = {
+            'posts': allpost,
+        }
+        return render(request, 'photo_app/index.html', d)
+    else:
+        return redirect('login')
 
-    allpost = PostModel.objects.all()
-    comment = CommentModel.objects.all()
+def profile(request, username):
 
+    user = UserModel.objects.filter(username=username).first()
+        
     d = {
-
-        'posts': allpost,
-        'comments': comment
-
+        'user': user,
     }
-
-    return render(request, 'photo_app/index.html', d)
+    return render(request,'photo_app/profile.html', d)
