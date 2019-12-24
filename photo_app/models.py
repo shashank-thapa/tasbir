@@ -7,7 +7,6 @@ class PostModel(models.Model):
     location = models.CharField(max_length = 255)
     uploaded_by = models.ForeignKey(UserModel, on_delete = models.CASCADE, related_name="posts")
     image = models.ImageField(upload_to='user_uploads')
-    likes = models.PositiveIntegerField(default=0)
     liked_by = models.ManyToManyField(UserModel, related_name='liked_photos', blank=True)
 
     def __str__(self):

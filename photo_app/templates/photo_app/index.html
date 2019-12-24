@@ -6,21 +6,32 @@
             <section class="photo">
                 <header class="photo__header">
                     <div class="photo__header-column">
+                        <a href="{% url 'profile' request.session.username%}">
                         <img
                             class="photo__avatar"
                             src="{{post.uploaded_by.profile_pic.url}}"
                         />
                     </div>
                     <div class="photo__header-column">
-                        <span class="photo__username">{{post.uploaded_by.username}}</span>
+                        <a href="{% url 'profile' request.session.username%}" style="color:black"><span class="photo__username">{{post.uploaded_by.username}}</span></a>
                         <span class="photo__location">{{post.location}}</span>
                     </div>
+                    {% if post.uploaded_by.id == request.session.user_id %}
+                        <div class="photo__header-column">
+                            <form action="{% url 'deletephoto' %}"method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name ="postid" value="{{post.id}}">
+                                <input type="submit" value="Delete" style="margin-left: 520px;">
+                            </form>
+                        </div>
+                    {% endif %}
                 </header>
                 <div class="photo__file-container">
+                    
                     <img
                         class="photo__file"
                         src="{{post.image.url}}"
-                    />
+                    /></a>
                 </div>
                 <div class="photo__info">
                     <div class="photo__icons">
