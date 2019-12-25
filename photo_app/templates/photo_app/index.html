@@ -54,8 +54,12 @@
                     </ul>
                     <span class="photo__time-ago">{{post.created}}</span>
                     <div class="photo__add-comment-container">
-                        <textarea placeholder="Add a comment..." class="photo__add-comment"></textarea>
-                        <i class="fa fa-ellipsis-h"></i>
+                        <form method= "POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <textarea placeholder="Add a comment..." class="photo__add-comment"></textarea>
+                            {{form.as_p}}
+                        <i><button type='submit' class="fa fa-ellipsis-h"></button></i>
+                        </form>
                     </div>
                 </div>
             </section>

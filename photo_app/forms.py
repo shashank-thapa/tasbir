@@ -1,5 +1,5 @@
 from django import forms
-from .models import PostModel
+from .models import PostModel, CommentModel
 
 class AddNewPostForm(forms.ModelForm):
 
@@ -16,4 +16,11 @@ class AddNewPostForm(forms.ModelForm):
         fields = (
             'location',
             'image',
+        )
+
+class AddNewCommentForm(forms.ModelForm):
+    class Meta:
+        model = CommentModel
+        fields = (
+            'text',
         )

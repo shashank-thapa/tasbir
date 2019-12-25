@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .models import PostModel
 from .models import CommentModel
 from user_app.models import UserModel
-from .forms import AddNewPostForm
+from .forms import AddNewPostForm, AddNewCommentForm
 
 # Create your views here.
 def index(request):
@@ -11,6 +11,7 @@ def index(request):
         d = {
             'posts': allpost,
         }
+        
         return render(request, 'photo_app/index.html', d)
     else:
         return redirect('login')
@@ -81,4 +82,29 @@ def search(request):
             }
             return render(request,'photo_app/search-results.html',d)
         
+    return redirect('index')
+
+def comments(request):
+    if 'user_id' not in request.session:
+        return redirect('login')
+    
+    userid = request.session.get('user_id',None)
+    user = UserModel.objects.filter(id=userid).first()
+    
+    if request.method == "POST":
+        form = AddNewCommentForm(data=request.POST)
+        if form.is_valid():
+            comment=form.save(commit=False)
+            comment.save()
+            return redirect('index')
+        else:
+            form = AddNewCommentForm()
+            d={
+                'form': form,
+                'user': user
+            }
+            return render(request,'photo_app/index.html',d)
+    else:
+            return render(request,'photo_app/index.html')
+    
     return redirect('index')
