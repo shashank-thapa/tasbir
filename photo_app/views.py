@@ -92,19 +92,10 @@ def comments(request):
     user = UserModel.objects.filter(id=userid).first()
     
     if request.method == "POST":
-        form = AddNewCommentForm(data=request.POST)
-        if form.is_valid():
-            comment=form.save(commit=False)
-            comment.save()
-            return redirect('index')
-        else:
-            form = AddNewCommentForm()
-            d={
-                'form': form,
-                'user': user
-            }
-            return render(request,'photo_app/index.html',d)
-    else:
-            return render(request,'photo_app/index.html')
-    
+        text = request.POST.get('commenttext', None)
+        postid = request.POST.get('postid', None)
+        if text and postid:
+            parentpost = PostModel.objects.filter(id=postid).first()
+            comment = CommentModel(commented_by=user, text=text, parent_post=parentpost)
+            comment.save()    
     return redirect('index')

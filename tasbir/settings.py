@@ -25,7 +25,11 @@ SECRET_KEY = '$f$+t90090k&*w-z*2jmf-m8rt^js#lk62r2(z^6%@wzz^aj5i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "tasbir-bootcamp-app.herokuapp.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -123,8 +127,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT ='/staticfiles/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+if 'DATABASE_URL' in os.environ: #means heroku 
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}

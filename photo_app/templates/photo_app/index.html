@@ -6,14 +6,15 @@
             <section class="photo">
                 <header class="photo__header">
                     <div class="photo__header-column">
-                        <a href="{% url 'profile' request.session.username%}">
+                        <a href="{% url 'profile' post.uploaded_by.username %}">
                         <img
                             class="photo__avatar"
                             src="{{post.uploaded_by.profile_pic.url}}"
                         />
+                        </a>
                     </div>
                     <div class="photo__header-column">
-                        <a href="{% url 'profile' request.session.username%}" style="color:black"><span class="photo__username">{{post.uploaded_by.username}}</span></a>
+                        <a href="{% url 'profile' post.uploaded_by.username%}" style="color:black"><span class="photo__username">{{post.uploaded_by.username}}</span></a>
                         <span class="photo__location">{{post.location}}</span>
                     </div>
                     {% if post.uploaded_by.id == request.session.user_id %}
@@ -46,19 +47,25 @@
                     <span class="photo__likes">{{post.liked_by.all|length}} like{{post.liked_by.all|pluralize:"s"}}</span>
                     {% endif %}
                     <ul class="photo__comments">
-                        {% for comment in post.comments.all%}
+                        {% for comment in post.comments.all|slice:":5"%}
                             <li class="photo__comment">
-                                <span class="photo__comment-author">{{comment.commented_by.username}}</span>{{comment.text}}
+                                <a href="{% url 'profile' comment.commented_by.username %}" style="color: inherit;"><span class="photo__comment-author">{{comment.commented_by.username}}</span></a>{{comment.text}}
                             </li>
                         {% endfor %}
+                        {% if post.comments.all|length > 5 %}
+                            <a>
+                                <li class="photo_comment">
+                                    View more
+                                </li>
+                            </a>
+                        {% endif %}
                     </ul>
                     <span class="photo__time-ago">{{post.created}}</span>
                     <div class="photo__add-comment-container">
-                        <form method= "POST" enctype="multipart/form-data">
+                        <form method= "POST" action="{% url 'comment' %}">
                         {% csrf_token %}
-                            <textarea placeholder="Add a comment..." class="photo__add-comment"></textarea>
-                            {{form.as_p}}
-                        <i><button type='submit' class="fa fa-ellipsis-h"></button></i>
+                            <input type="hidden" name="postid" value="{{post.id}}">
+                            <input name="commenttext" placeholder="Add a comment..." class="photo__add-comment"></textarea>
                         </form>
                     </div>
                 </div>
